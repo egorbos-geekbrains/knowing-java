@@ -1,10 +1,13 @@
 package codes.egorbos.geekbrains.java;
 
 import org.json.JSONObject;
+import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.logging.FileHandler;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Logger;
+import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
 
 public class App {
@@ -90,6 +93,21 @@ public class App {
         return strBuilder.toString();
     }
 
+    // Дополнительная задача
+    private static List<String> parseGrades(String objects) throws JSONException {
+        List<String> grades = new ArrayList<String>();
+        var objectsArray = new JSONArray(objects);
+        for (var i = 0; i < objectsArray.length(); i++) {
+            var object = objectsArray.getJSONObject(i);
+            var lastName = object.getString("фамилия");
+            var grade = object.getInt("оценка");
+            var subject = object.getString("предмет");
+            var gradeObject = String.format("Студент %s получил %o по предмету %s.", lastName, grade, subject);
+            grades.add(gradeObject);
+        }
+        return grades;
+    }
+
     public static void main(String[] args) {
         //
         System.out.println("Задача № 1");
@@ -120,6 +138,22 @@ public class App {
             var sortedArray = bubbleSort(inputArray, logger);
             System.out.printf("Отсортированый массив: %s%n", arrayToString(sortedArray));
         } catch (Exception e) {
+            System.out.printf("Ошибка: %s%n", e.getMessage());
+        }
+
+        //
+        System.out.println("\nДополнительная задача");
+        var objects =   """
+                            [{"фамилия":"Иванов","оценка":"5","предмет":"Математика"},
+                            {"фамилия":"Петрова","оценка":"4","предмет":"Информатика"},
+                            {"фамилия":"Краснов","оценка":"5","предмет":"Физика"}]
+                        """;
+        try {
+            var grades = parseGrades(objects);
+            for (var grade : grades) {
+                System.out.println(grade);
+            }
+        } catch (JSONException e) {
             System.out.printf("Ошибка: %s%n", e.getMessage());
         }
     }
