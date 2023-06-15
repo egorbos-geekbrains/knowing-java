@@ -3,6 +3,10 @@ package codes.egorbos.geekbrains.java;
 import org.json.JSONObject;
 import org.json.JSONException;
 
+import java.util.logging.FileHandler;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
 public class App {
 
     // Задача № 1
@@ -24,7 +28,7 @@ public class App {
         return String.format("'%s'", value);
     }
 
-    public static String buildSqlQuery(String input) throws JSONException {
+    private static String buildSqlQuery(String input) throws JSONException {
         var object = new JSONObject(input);
         var strBuilder = new StringBuilder("SELECT * FROM students");
         if (allFieldsNull(object)) {
@@ -47,8 +51,9 @@ public class App {
     }
 
     // Задача № 2
-    static int[] bubbleSort(int[] array) {
-        var temp = 0;        
+    private static int[] bubbleSort(int[] array, Logger logger) {
+        var temp = 0;
+        var step = 0;
         var count = array.length;
         var sorted = new int[count];
         System.arraycopy(array, 0, sorted, 0, count);
@@ -59,6 +64,11 @@ public class App {
                     temp = sorted[j - 1];
                     sorted[j - 1] = sorted[j];
                     sorted[j] = temp;
+
+                    if (logger != null) {
+                        var message = String.format("Шаг %o - %s", ++step, arrayToString(sorted));
+                        logger.info(message);
+                    }
                 }
             }
         }
@@ -66,7 +76,7 @@ public class App {
         return sorted;
     }
 
-    static String arrayToString(int[] array) {
+    private static String arrayToString(int[] array) {
         var strBuilder = new StringBuilder("{");
         if (array.length != 0) {
             for(var i = 0; i < array.length; i++) {
@@ -97,7 +107,20 @@ public class App {
         System.out.println("\nЗадача № 2");
         int[] inputArray = { 7, 2, 14, 21, 1, 6, 9 };
         System.out.printf("Массив до сортировки: %s%n", arrayToString(inputArray));
-        var sortedArray = bubbleSort(inputArray);
-        System.out.printf("Отсортированый массив: %s%n", arrayToString(sortedArray));
+
+        try {
+            var logger = Logger.getLogger("MainLogger");
+            var formatter = new SimpleFormatter();
+            var fileHandler = new FileHandler("log.txt");
+
+            fileHandler.setFormatter(formatter);
+            logger.addHandler(fileHandler);
+            logger.setUseParentHandlers(false);
+            
+            var sortedArray = bubbleSort(inputArray, logger);
+            System.out.printf("Отсортированый массив: %s%n", arrayToString(sortedArray));
+        } catch (Exception e) {
+            System.out.printf("Ошибка: %s%n", e.getMessage());
+        }
     }
 }
