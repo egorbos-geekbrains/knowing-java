@@ -3,13 +3,13 @@ package codes.egorbos.geekbrains.java;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-public class App 
-{
+public class App {
+
     // Задача № 1
     private static boolean allFieldsNull(JSONObject object) {
         var keys = object.keySet();
         if (keys.size() == 0) return true;
-        for (String key : object.keySet()) {
+        for (var key : object.keySet()) {
             if (object.get(key) != null) {
                 return false;
             }
@@ -26,32 +26,78 @@ public class App
 
     public static String buildSqlQuery(String input) throws JSONException {
         var object = new JSONObject(input);
-        var builder = new StringBuilder("SELECT * FROM students");
+        var strBuilder = new StringBuilder("SELECT * FROM students");
         if (allFieldsNull(object)) {
-            return builder.toString();
+            return strBuilder.toString();
         }
 
-        builder.append(" WHERE");
+        strBuilder.append(" WHERE");
 
         var andNeeded = false;
-        for (String key : object.keySet()) {
+        for (var key : object.keySet()) {
             var value = object.get(key);
             if (!value.equals(null)) {
                 var param = String.format("%s = %s", key, convertFieldValueToString(value));
                 var part = String.format("%s%s", andNeeded ? " AND " : " ", param);
-                builder.append(part);
+                strBuilder.append(part);
                 andNeeded = true;
             }
         }
-        return builder.toString();
+        return strBuilder.toString();
+    }
+
+    // Задача № 2
+    static int[] bubbleSort(int[] array) {
+        var temp = 0;        
+        var count = array.length;
+        var sorted = new int[count];
+        System.arraycopy(array, 0, sorted, 0, count);
+
+        for (var i = 0; i < count; i++) {
+            for (var j = 1; j < (count - i); j++) {
+                if (sorted[j - 1] > sorted[j]) {
+                    temp = sorted[j - 1];
+                    sorted[j - 1] = sorted[j];
+                    sorted[j] = temp;
+                }
+            }
+        }
+
+        return sorted;
+    }
+
+    static String arrayToString(int[] array) {
+        var strBuilder = new StringBuilder("{");
+        if (array.length != 0) {
+            for(var i = 0; i < array.length; i++) {
+                if (i != 0) {
+                    strBuilder.append(",");
+                }
+                strBuilder.append(String.format(" %o", array[i]));
+            }
+        }
+        strBuilder.append(" }");
+        return strBuilder.toString();
     }
 
     public static void main(String[] args) {
         //
         System.out.println("Задача № 1");
         var inputData = "{\"name\":\"Ivanov\", \"country\":\"Russia\", \"city\":null, \"age\":33}";
-        var sqlQuery = buildSqlQuery(inputData);
-        System.out.printf("Входные данные: %s%n", inputData);
-        System.out.printf("Результат: %s%n", sqlQuery);
+        
+        try {
+            var sqlQuery = buildSqlQuery(inputData);
+            System.out.printf("Входные данные: %s%n", inputData);
+            System.out.printf("Результат: %s%n", sqlQuery);
+        } catch (JSONException e) {
+            System.out.printf("Ошибка: %s%n", e.getMessage());
+        }
+
+        //
+        System.out.println("\nЗадача № 2");
+        int[] inputArray = { 7, 2, 14, 21, 1, 6, 9 };
+        System.out.printf("Массив до сортировки: %s%n", arrayToString(inputArray));
+        var sortedArray = bubbleSort(inputArray);
+        System.out.printf("Отсортированый массив: %s%n", arrayToString(sortedArray));
     }
 }
