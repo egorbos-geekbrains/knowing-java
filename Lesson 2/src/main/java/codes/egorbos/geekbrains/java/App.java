@@ -5,6 +5,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.List;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.logging.FileHandler;
@@ -143,17 +146,19 @@ public class App {
 
         //
         System.out.println("\nДополнительная задача");
-        var objects =   """
-                            [{"фамилия":"Иванов","оценка":"5","предмет":"Математика"},
-                            {"фамилия":"Петрова","оценка":"4","предмет":"Информатика"},
-                            {"фамилия":"Краснов","оценка":"5","предмет":"Физика"}]
-                        """;
         try {
+            var file = new File("grades.txt");
+            var fileStream = new FileInputStream(file);
+            var data = new byte[(int) file.length()];
+            fileStream.read(data);
+            fileStream.close();
+            
+            var objects = new String(data, "UTF-8");
             var grades = parseGrades(objects);
             for (var grade : grades) {
                 System.out.println(grade);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             System.out.printf("Ошибка: %s%n", e.getMessage());
         }
     }
