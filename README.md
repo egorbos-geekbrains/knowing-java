@@ -5,3 +5,5 @@
 ## [**Урок 2. Почему вы не можете не использовать API**](https://github.com/egorbos-geekbrains/knowing-java/tree/main/Lesson%202)
 
 ## [**Урок 3. Коллекции JAVA: Введение**](https://github.com/egorbos-geekbrains/knowing-java/tree/main/Lesson%203)
+
+## [**Урок 4. Хранение и обработка данных. Часть 1: Приоритетные коллекции**](https://github.com/egorbos-geekbrains/knowing-java/tree/main/Lesson%204)
