@@ -4,11 +4,10 @@ import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.List;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
+import java.util.List;
 import java.util.ArrayList;
+import java.io.FileInputStream;
 import java.util.logging.Logger;
 import java.util.logging.FileHandler;
 import java.util.logging.SimpleFormatter;
